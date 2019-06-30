@@ -19,11 +19,12 @@ module Jstreams
     # Publishes a message to the given stream
     #
     # @param [String] stream Destination stream name
-    # @param [Hash] message Message payload
-    def publish(stream, message)
+    # @param [Hash] message Message to serialize
+    # @param [Hash] metadata Message metadata to serialize
+    def publish(stream, message, metadata)
       @logger.tagged('publisher') do
         @redis_pool.with do |redis|
-          redis.xadd(stream, payload: @serializer.serialize(message, stream))
+          redis.xadd(stream, payload: @serializer.serialize(message, metadata, stream))
         end
         @logger.debug { "published to stream #{stream}: #{message.inspect}" }
       end

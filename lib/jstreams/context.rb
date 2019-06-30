@@ -43,8 +43,9 @@ module Jstreams
     #
     # @param [String] stream Stream name
     # @param [Hash] message Message to publish
-    def publish(stream, message)
-      @publisher.publish(stream, message)
+    # @param [Hash] metadata Message metadata to serialize
+    def publish(stream, message, metadata = {})
+      @publisher.publish(stream, message, metadata)
     end
 
     ##

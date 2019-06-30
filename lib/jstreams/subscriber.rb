@@ -195,7 +195,9 @@ module Jstreams
     def handle_entry(stream, id, entry)
       logger.debug { "received raw entry: #{entry.inspect}" }
       begin
-        handler.call(deserialize_entry(stream, id, entry), stream, self)
+        handler.call(
+          deserialize_entry(stream, id, entry).merge(stream: stream)
+        )
         logger.debug { "ACK message #{[stream, consumer_group, id].inspect}" }
         redis.xack(stream, consumer_group, id)
       rescue StandardError => e
